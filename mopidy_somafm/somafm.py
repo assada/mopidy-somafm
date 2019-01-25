@@ -76,6 +76,8 @@ class SomaFMClient(object):
                     channel_data[key] = val
                 elif key == 'updated':
                     channel_data['updated'] = int(val)
+                elif key == 'lastPlaying':
+                    channel_data['lastPlaying'] = val.split(' - ', 1)
                 elif 'pls' in key:
                     pls_quality = key[:-3]
                     pls_format = child_detail.attrib['format']
