@@ -71,12 +71,15 @@ class SomaFMClient(object):
 
                 key = child_detail.tag
                 val = child_detail.text
-
+                logger.info('Key: %s' % (key) # Remove after debug!
+                logger.info('Val: %s' % (key) # Remove after debug!
+                            
                 if key in ['title', 'image', 'dj', 'genre', 'description']:
                     channel_data[key] = val
                 elif key == 'updated':
                     channel_data['updated'] = int(val)
                 elif key == 'lastPlaying':
+                    logger.info('Artist: %s' % (val) # Remove after debug!
                     channel_data['lastPlaying'] = val.split(' - ', 1)
                 elif 'pls' in key:
                     pls_quality = key[:-3]
