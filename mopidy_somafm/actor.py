@@ -45,12 +45,19 @@ class SomaFMLibraryProvider(backend.LibraryProvider):
 
         channel_name = uri[uri.index('/') + 1:]
         channel_data = self.backend.somafm.channels[channel_name]
-
+        
+        track = channel_data['title']
+        
         # Artists
         if self.backend.dj_as_artist:
             artist = Artist(name=channel_data['dj'])
         else:
-            artist = Artist()
+            data = channel_data['lastPlaying']
+            if(len(data) == 2):
+              artist = Artist(name=data[0])
+              track = data[1]
+            else: 
+              artist = Artist(name="unknown")
 
         # Build album (idem as playlist, but with more metada)
         album = Album(
@@ -65,7 +72,7 @@ class SomaFMLibraryProvider(backend.LibraryProvider):
             last_modified=channel_data['updated'],
             comment=channel_data['description'],
             genre=channel_data['genre'],
-            name=channel_data['title'],
+            name=track,
             uri=channel_data['pls'])
 
         return [track]
