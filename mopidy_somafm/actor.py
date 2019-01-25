@@ -53,11 +53,13 @@ class SomaFMLibraryProvider(backend.LibraryProvider):
             artist = Artist(name=channel_data['dj'])
         else:
             data = channel_data['lastPlaying']
+            logger.info('ACTOR: Artist: %s' % (data[0]) # Remove after debug!
+            logger.info('ACTOR: Track: %s' % (data[1]) # Remove after debug!
             if(len(data) == 2):
               artist = Artist(name=data[0])
               track = data[1]
             else: 
-              artist = Artist(name="unknown")
+              artist = Artist(name='unknown')
 
         # Build album (idem as playlist, but with more metada)
         album = Album(
