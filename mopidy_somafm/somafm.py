@@ -8,6 +8,7 @@ import re
 import requests
 import urlparse
 import collections
+import threading
 
 try:
     import xml.etree.cElementTree as ET
@@ -71,15 +72,12 @@ class SomaFMClient(object):
 
                 key = child_detail.tag
                 val = child_detail.text
-                logger.info('Key: %s' % (key)) # Remove after debug!
-                logger.info('Val: %s' % (key)) # Remove after debug!
                             
                 if key in ['title', 'image', 'dj', 'genre', 'description']:
                     channel_data[key] = val
                 elif key == 'updated':
                     channel_data['updated'] = int(val)
                 elif key == 'lastPlaying':
-                    logger.info('Artist: %s' % (val)) # Remove after debug!
                     channel_data['lastPlaying'] = val.split(' - ', 1)
                 elif 'pls' in key:
                     pls_quality = key[:-3]
@@ -100,6 +98,7 @@ class SomaFMClient(object):
                 self.channels[pls_id] = channel_data
 
         logger.info('Loaded %i SomaFM channels' % (len(self.channels)))
+        threading.Timer(5.0, self.refresh, [encoding, quality]).start()
 
     def extractStreamUrlFromPls(self, pls_uri):
         pls_content = self._downloadContent(pls_uri)
